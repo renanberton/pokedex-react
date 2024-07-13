@@ -10,10 +10,9 @@ const SearchForm = ({ onSearch }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>Pesquise o Pokémon</label>
       <input
         type="text"
-        placeholder="Digite aqui"
+        placeholder="Pesquisar um Pokémon"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />

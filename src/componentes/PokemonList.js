@@ -1,16 +1,31 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PokemonCard from './PokemonCard';
 
 const PokemonList = ({ searchTerm }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const limit = 20; // Define o limite de pokémons por página
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  useEffect(() => {
+    if (searchTerm === '') {
+      setPokemonList([]); // Limpa a lista ao reiniciar a busca
+      setOffset(0); // Reinicia o offset ao reiniciar a busca
+      fetchData(0); // Carrega os primeiros 20 pokémons
+    } else {
+      fetchSearchedPokemon();
+    }
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (searchTerm === '' && offset > 0) {
+      fetchData(offset); // Carrega mais pokémons quando o offset muda
+    }
+  }, [offset, searchTerm]);
+
+  const fetchData = async (newOffset) => {
     try {
-      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`);
+      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${newOffset}`);
       const results = response.data.results;
       const detailedPokemonPromises = results.map(async (pokemon) => {
         const detailedPokemonResponse = await axios.get(pokemon.url);
@@ -25,43 +40,34 @@ const PokemonList = ({ searchTerm }) => {
         };
       });
       const detailedPokemonData = await Promise.all(detailedPokemonPromises);
-      setPokemonList((prevList) => [...prevList, ...detailedPokemonData]);
+      if (newOffset === 0) {
+        setPokemonList(detailedPokemonData); // Define a lista inicial
+      } else {
+        setPokemonList((prevList) => [...prevList, ...detailedPokemonData]); // Adiciona à lista existente
+      }
     } catch (error) {
       console.error('Error fetching data: ', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [offset]);
-
-  const fetchSearchedPokemon = async () => {
-    if (!searchTerm) return;
-    setLoading(true);
-    try {
-      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
-      const detailedPokemonData = {
-        id: response.data.id,
-        name: response.data.name,
-        hp: response.data.stats.find((stat) => stat.stat.name === 'hp').base_stat,
-        image: response.data.sprites.other['dream_world']['front_default'],
-        typeEnglish: response.data.types[0].type.name,
-        typeTranslated: translateType(response.data.types[0].type.name),
-        weight: response.data.weight,
-      };
-      setPokemonList([detailedPokemonData]);
-    } catch (error) {
-      console.error('Error fetching data: ', error);
-    } finally {
-      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (searchTerm) {
-      fetchSearchedPokemon();
-    } else {
-      fetchData();
+  const fetchSearchedPokemon = async () => {
+    try {
+      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
+      const detailedPokemonResponse = response.data;
+      const pokemonData = {
+        id: detailedPokemonResponse.id,
+        name: detailedPokemonResponse.name,
+        hp: detailedPokemonResponse.stats.find((stat) => stat.stat.name === 'hp').base_stat,
+        image: detailedPokemonResponse.sprites.other['dream_world']['front_default'],
+        typeEnglish: detailedPokemonResponse.types[0].type.name,
+        typeTranslated: translateType(detailedPokemonResponse.types[0].type.name),
+        weight: detailedPokemonResponse.weight,
+      };
+      setPokemonList([pokemonData]);
+    } catch (error) {
+      console.error('Error fetching data: ', error);
     }
-  }, [searchTerm, offset, fetchData]);
+  };
 
   const translateType = (type) => {
     switch (type) {
@@ -107,23 +113,20 @@ const PokemonList = ({ searchTerm }) => {
   };
 
   const loadMorePokemon = () => {
-    setOffset((prevOffset) => prevOffset + 20);
+    setOffset((prevOffset) => prevOffset + limit); // Incrementa o offset pelo limite de pokémons
   };
 
   return (
     <div>
-      {loading && <p>Loading...</p>}
       <ul className="pokemon-list">
         {pokemonList.map((pokemon, index) => (
           <PokemonCard key={index} pokemon={pokemon} />
         ))}
       </ul>
-      {!searchTerm && (
-        <ul className="pokemon-list">
-          <button id="loadMore" onClick={loadMorePokemon}>
-            Carregar Mais Pokémon
-          </button>
-        </ul>
+      {searchTerm === '' && (
+        <button id="loadMore" onClick={loadMorePokemon}>
+          Carregar Mais Pokémon
+        </button>
       )}
     </div>
   );

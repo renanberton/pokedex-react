@@ -73,13 +73,13 @@
 .container button {
     background-color: transparent !important;
     border: 2px solid #ffffff;
-    margin-top: 50px;
+    margin: 50px auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #fff;
-    width: 200px;
+    width: 250px;
     height: auto;
     gap: 10x;
     border-radius: 5px;
@@ -117,6 +117,10 @@
 
 #loading {
     margin-top: 50px;
+}
+
+.load-more {
+    margin: 0 auto;
 }
 
 .pokemon-type-normal { background-color: #A8A878; }
@@ -220,3 +224,11 @@
 .pokemon-type-dark { background-color: #705848; }
 .pokemon-type-fairy { background-color: #EE99AC; }
 
+
+
+form input {
+    text-align: center;
+    height: 30px;
+    border: none;
+    border-radius: 2px;
+}
