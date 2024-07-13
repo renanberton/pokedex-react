@@ -125,7 +125,7 @@ const PokemonList = ({ searchTerm }) => {
       </ul>
       {searchTerm === '' && (
         <button id="loadMore" onClick={loadMorePokemon}>
-          Carregar Mais Pokémon
+          Carregar Mais Pokémons
         </button>
       )}
     </div>
