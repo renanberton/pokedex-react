@@ -80,7 +80,8 @@
     justify-content: center;
     align-items: center;
     background-color: #fff;
-    width: 250px;
+    max-width: 250px;
+    width: 70%;
     height: auto;
     gap: 10x;
     border-radius: 5px;
@@ -164,10 +165,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
     height: auto;
     margin: 0 auto;
     gap: 10px;
+    width: 100%;
 }
 
 .container form label {
@@ -219,6 +220,14 @@
 .pokemon-type-dark { background-color: #705848; }
 .pokemon-type-fairy { background-color: #EE99AC; }
 
+.pokemon-list p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    color: #FFFFFF;
+    text-align: center;
+    max-width: 250px;
+    width: 90%;
+}
 
 
 form input {
@@ -226,4 +235,6 @@ form input {
     height: 30px;
     border: none;
     border-radius: 2px;
+    width: 90%;
+    max-width: 350px;
 }

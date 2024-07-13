@@ -5,12 +5,14 @@ import PokemonCard from './PokemonCard';
 const PokemonList = ({ searchTerm }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
+  const [error, setError] = useState(false);
   const limit = 20; // Define o limite de pokémons por página
 
   useEffect(() => {
     if (searchTerm === '') {
       setPokemonList([]); // Limpa a lista ao reiniciar a busca
       setOffset(0); // Reinicia o offset ao reiniciar a busca
+      setError(false); // Limpa o estado de erro
       fetchData(0); // Carrega os primeiros 20 pokémons
     } else {
       fetchSearchedPokemon();
@@ -45,8 +47,11 @@ const PokemonList = ({ searchTerm }) => {
       } else {
         setPokemonList((prevList) => [...prevList, ...detailedPokemonData]); // Adiciona à lista existente
       }
+      setError(false); // Limpa o estado de erro ao ter sucesso na busca
     } catch (error) {
       console.error('Error fetching data: ', error);
+      setError(true);
+      setPokemonList([]); // Limpa a lista de pokémons em caso de erro
     }
   };
 
@@ -64,8 +69,11 @@ const PokemonList = ({ searchTerm }) => {
         weight: detailedPokemonResponse.weight,
       };
       setPokemonList([pokemonData]);
+      setError(false); // Limpa o estado de erro ao ter sucesso na busca
     } catch (error) {
       console.error('Error fetching data: ', error);
+      setError(true);
+      setPokemonList([]); // Limpa a lista de pokémons em caso de erro
     }
   };
 
@@ -117,11 +125,16 @@ const PokemonList = ({ searchTerm }) => {
   };
 
   return (
-    <div>
+    <div className='container'>
       <ul className="pokemon-list">
-        {pokemonList.map((pokemon, index) => (
-          <PokemonCard key={index} pokemon={pokemon} />
-        ))}
+        {error ? (
+          <p>Pokemon não encontrado.<br /> Por favor, digite novamente.</p>
+        ) : (
+          pokemonList.length > 0 &&
+          pokemonList.map((pokemon, index) => (
+            <PokemonCard key={index} pokemon={pokemon} />
+          ))
+        )}
       </ul>
       {searchTerm === '' && (
         <button id="loadMore" onClick={loadMorePokemon}>
