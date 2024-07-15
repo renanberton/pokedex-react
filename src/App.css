@@ -47,12 +47,6 @@
     border: 10px solid yellow;
 }
 
-.container li p {
-    color: #13000A;
-    font-family: 'Francois One', sans-serif;
-    font-size: 20px;
-}
-
 .error {
     font-family: 'Francois One', sans-serif;
     font-size: 20px;
@@ -229,6 +223,22 @@
     width: 90%;
 }
 
+.pokemon-infos {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.pokemon-infos p {
+    color: #13000A;
+    font-family: 'Francois One', sans-serif;
+    font-size: 16px;
+    width: 50%;
+    text-align: center;
+}
 
 form input {
     text-align: center;
@@ -238,3 +248,5 @@ form input {
     width: 90%;
     max-width: 350px;
 }
+
+

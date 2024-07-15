@@ -42,16 +42,23 @@ const PokemonList = ({ searchTerm }) => {
           id: detailedPokemonResponse.data.id,
           name: detailedPokemonResponse.data.name,
           hp: detailedPokemonResponse.data.stats.find((stat) => stat.stat.name === 'hp').base_stat,
+          attack: detailedPokemonResponse.data.stats.find((stat) => stat.stat.name === 'attack').base_stat,
+          defense: detailedPokemonResponse.data.stats.find((stat) => stat.stat.name === 'defense').base_stat,
+          specialAttack: detailedPokemonResponse.data.stats.find((stat) => stat.stat.name === 'special-attack').base_stat,
+          specialDefense: detailedPokemonResponse.data.stats.find((stat) => stat.stat.name === 'special-defense').base_stat,
+          speed: detailedPokemonResponse.data.stats.find((stat) => stat.stat.name === 'speed').base_stat,
           image: detailedPokemonResponse.data.sprites.other['dream_world']['front_default'],
           typeEnglish: detailedPokemonResponse.data.types[0].type.name,
           typeTranslated: translateType(detailedPokemonResponse.data.types[0].type.name),
           weight: detailedPokemonResponse.data.weight,
+          height: detailedPokemonResponse.data.height,
+          baseExperience: detailedPokemonResponse.data.base_experience,
+          abilities: detailedPokemonResponse.data.abilities,
         };
       });
       const detailedPokemonData = await Promise.all(detailedPokemonPromises);
       if (newOffset === 0) {
         setPokemonList(detailedPokemonData); // Define a lista inicial
-        console.log('oi');
       } else {
         setPokemonList((prevList) => [...prevList, ...detailedPokemonData]); // Adiciona à lista existente
       }
@@ -62,7 +69,7 @@ const PokemonList = ({ searchTerm }) => {
       setPokemonList([]); // Limpa a lista de pokémons em caso de erro
     }
   };
-
+  
   const fetchSearchedPokemon = async () => {
     try {
       const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
@@ -71,11 +78,18 @@ const PokemonList = ({ searchTerm }) => {
         id: detailedPokemonResponse.id,
         name: detailedPokemonResponse.name,
         hp: detailedPokemonResponse.stats.find((stat) => stat.stat.name === 'hp').base_stat,
+        attack: detailedPokemonResponse.stats.find((stat) => stat.stat.name === 'attack').base_stat,
+        defense: detailedPokemonResponse.stats.find((stat) => stat.stat.name === 'defense').base_stat,
+        specialAttack: detailedPokemonResponse.stats.find((stat) => stat.stat.name === 'special-attack').base_stat,
+        specialDefense: detailedPokemonResponse.stats.find((stat) => stat.stat.name === 'special-defense').base_stat,
+        speed: detailedPokemonResponse.stats.find((stat) => stat.stat.name === 'speed').base_stat,
         image: detailedPokemonResponse.sprites.other['dream_world']['front_default'],
         typeEnglish: detailedPokemonResponse.types[0].type.name,
         typeTranslated: translateType(detailedPokemonResponse.types[0].type.name),
         weight: detailedPokemonResponse.weight,
         height: detailedPokemonResponse.height,
+        baseExperience: detailedPokemonResponse.base_experience,
+        abilities: detailedPokemonResponse.abilities,
       };
       setPokemonList([pokemonData]);
       setError(false); // Limpa o estado de erro ao ter sucesso na busca
@@ -85,6 +99,7 @@ const PokemonList = ({ searchTerm }) => {
       setPokemonList([]); // Limpa a lista de pokémons em caso de erro
     }
   };
+  
 
   const translateType = (type) => {
     switch (type) {
