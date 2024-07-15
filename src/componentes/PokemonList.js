@@ -6,7 +6,7 @@ const PokemonList = ({ searchTerm }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
   const [error, setError] = useState(false);
-  var limit = 20; // Define o limite de pokémons por página
+  const limit = 20; // Define o limite de pokémons por página
 
   useEffect(() => {
     if (searchTerm === '') {
@@ -57,11 +57,16 @@ const PokemonList = ({ searchTerm }) => {
         };
       });
       const detailedPokemonData = await Promise.all(detailedPokemonPromises);
-      if (newOffset === 0) {
-        setPokemonList(detailedPokemonData); // Define a lista inicial
-      } else {
-        setPokemonList((prevList) => [...prevList, ...detailedPokemonData]); // Adiciona à lista existente
-      }
+
+      setPokemonList((prevList) => {
+        // Filtra pokémons duplicados
+        const newList = [...prevList, ...detailedPokemonData];
+        const uniquePokemonList = newList.filter((pokemon, index, self) => 
+          index === self.findIndex((p) => p.id === pokemon.id)
+        );
+        return uniquePokemonList;
+      });
+      
       setError(false); // Limpa o estado de erro ao ter sucesso na busca
     } catch (error) {
       console.error('Error fetching data: ', error);
@@ -69,7 +74,7 @@ const PokemonList = ({ searchTerm }) => {
       setPokemonList([]); // Limpa a lista de pokémons em caso de erro
     }
   };
-  
+
   const fetchSearchedPokemon = async () => {
     try {
       const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
@@ -99,7 +104,6 @@ const PokemonList = ({ searchTerm }) => {
       setPokemonList([]); // Limpa a lista de pokémons em caso de erro
     }
   };
-  
 
   const translateType = (type) => {
     switch (type) {
@@ -155,7 +159,6 @@ const PokemonList = ({ searchTerm }) => {
 
   return (
     <div className='container'>
-      
       <ul className="pokemon-list" style={{ 
         flexDirection: pokemonList.length === 1 ? 'column' : 'row',
         gap: pokemonList.length === 1 ? '0px' : '100px'}}>
