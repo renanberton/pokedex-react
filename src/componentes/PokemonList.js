@@ -6,7 +6,7 @@ const PokemonList = ({ searchTerm }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
   const [error, setError] = useState(false);
-  const limit = 20; // Define o limite de pokémons por página
+  var limit = 20; // Define o limite de pokémons por página
 
   useEffect(() => {
     if (searchTerm === '') {
@@ -21,7 +21,7 @@ const PokemonList = ({ searchTerm }) => {
 
   const AllList = () => {
     setPokemonList([]); // Limpa a lista ao reiniciar a busca
-    setOffset(0); // Reinicia o offset ao reiniciar a busca
+    setOffset(20); // Reinicia o offset ao reiniciar a busca
     setError(false); // Limpa o estado de erro
     fetchData(0); // Carrega os primeiros 20 pokémons
   }
@@ -129,7 +129,11 @@ const PokemonList = ({ searchTerm }) => {
   };
 
   const loadMorePokemon = () => {
-    setOffset((prevOffset) => prevOffset + limit); // Incrementa o offset pelo limite de pokémons
+    if(limit < 20) {
+      limit = 20;
+    } else {
+      setOffset((prevOffset) => prevOffset + limit); // Incrementa o offset pelo limite de pokémons
+    }
     fetchData(offset);
   };
 
