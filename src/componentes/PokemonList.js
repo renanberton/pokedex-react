@@ -19,6 +19,13 @@ const PokemonList = ({ searchTerm }) => {
     }
   }, [searchTerm]);
 
+  const AllList = () => {
+    setPokemonList([]); // Limpa a lista ao reiniciar a busca
+    setOffset(0); // Reinicia o offset ao reiniciar a busca
+    setError(false); // Limpa o estado de erro
+    fetchData(0); // Carrega os primeiros 20 pokémons
+  }
+
   useEffect(() => {
     if (searchTerm === '' && offset > 0) {
       fetchData(offset); // Carrega mais pokémons quando o offset muda
@@ -44,6 +51,7 @@ const PokemonList = ({ searchTerm }) => {
       const detailedPokemonData = await Promise.all(detailedPokemonPromises);
       if (newOffset === 0) {
         setPokemonList(detailedPokemonData); // Define a lista inicial
+        console.log('oi');
       } else {
         setPokemonList((prevList) => [...prevList, ...detailedPokemonData]); // Adiciona à lista existente
       }
@@ -122,21 +130,40 @@ const PokemonList = ({ searchTerm }) => {
 
   const loadMorePokemon = () => {
     setOffset((prevOffset) => prevOffset + limit); // Incrementa o offset pelo limite de pokémons
+    fetchData(offset);
   };
 
   return (
     <div className='container'>
-      <ul className="pokemon-list">
+      
+      <ul className="pokemon-list" style={{ 
+        flexDirection: pokemonList.length === 1 ? 'column' : 'row',
+        gap: pokemonList.length === 1 ? '0px' : '100px'}}>
         {error ? (
-          <p>Pokemon não encontrado.<br /> Por favor, digite novamente.</p>
+          <div>
+            <p>Pokemon não encontrado.<br /> Por favor, digite novamente.</p>
+            <button onClick={AllList}>
+              Listar Todos
+            </button>
+          </div>
         ) : (
-          pokemonList.length > 0 &&
-          pokemonList.map((pokemon, index) => (
-            <PokemonCard key={index} pokemon={pokemon} />
-          ))
+        pokemonList.length > 0 && (
+          <>
+            {pokemonList.map((pokemon, index) => (
+              <div key={index}>
+                <PokemonCard pokemon={pokemon} />
+              </div>
+              ))}
+            {pokemonList.length === 1 && (
+              <button onClick={AllList}>
+                Listar Todos
+              </button>
+              )}
+            </>
+          )
         )}
       </ul>
-      {searchTerm === '' && (
+      {pokemonList.length > 1 && (
         <button id="loadMore" onClick={loadMorePokemon}>
           Carregar Mais Pokémons
         </button>
