@@ -75,6 +75,7 @@ const PokemonList = ({ searchTerm }) => {
         typeEnglish: detailedPokemonResponse.types[0].type.name,
         typeTranslated: translateType(detailedPokemonResponse.types[0].type.name),
         weight: detailedPokemonResponse.weight,
+        height: detailedPokemonResponse.height,
       };
       setPokemonList([pokemonData]);
       setError(false); // Limpa o estado de erro ao ter sucesso na busca
