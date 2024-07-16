@@ -12,7 +12,7 @@ const SearchForm = ({ onSearch }) => {
     <form onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Pesquisar um Pokémon"
+        placeholder="Digite o nome do Pokémon"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />

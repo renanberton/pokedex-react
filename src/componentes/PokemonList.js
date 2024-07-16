@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PokemonCard from './PokemonCard';
+import Button from 'react-bootstrap/Button';
 
 const PokemonList = ({ searchTerm }) => {
   const [pokemonList, setPokemonList] = useState([]);

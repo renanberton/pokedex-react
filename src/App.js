@@ -13,6 +13,7 @@ function App() {
   return (
     <div className="container">
       <img className="logo" src="/assets/imgs/pokemon-logo.png" alt="Pokémon Logo" />
+      <h1>Pesquise Pokémons</h1>
       <SearchForm onSearch={handleSearch} />
       <PokemonList searchTerm={searchTerm} />
       <button id="btnTop" title="↑ Topo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
