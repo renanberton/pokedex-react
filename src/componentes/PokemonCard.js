@@ -1,4 +1,7 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+
 
 const PokemonCard = ({ pokemon }) => {
   return (
@@ -10,10 +13,14 @@ const PokemonCard = ({ pokemon }) => {
         <p> {pokemon.typeTranslated}</p>
         <p>Altura {pokemon.height}</p>
         <p>Peso {pokemon.weight}</p>
-        <p>Ataque {pokemon.attack}</p>
-        <p>Defesa {pokemon.defense}</p>
-        <p>ATK Especial {pokemon.specialAttack}</p>
-        <p>DEF Especial {pokemon.specialDefense}</p>
+        <p>Ataque</p>
+        <ProgressBar now={pokemon.attack} min={0} max={255} label={`${pokemon.attack}`} />
+        <p>Defesa</p>
+        <ProgressBar now={pokemon.defense} min={0} max={255} label={`${pokemon.defense}`} />
+        <p>Ataque Especial</p>
+        <ProgressBar now={pokemon.specialAttack} min={0} max={255} label={`${pokemon.specialAttack}`} />
+        <p>Defesa Especial</p>
+        <ProgressBar now={pokemon.specialDefense} min={0} max={255} label={`${pokemon.specialDefense}`} />
       </div>
     </li>
   );
