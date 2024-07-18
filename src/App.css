@@ -40,7 +40,7 @@
     align-items: center;
     max-width: 250px;
     width: 100%;
-    height: 500px;
+    height: auto;
     border-radius: 4px;
     text-transform: capitalize;
     padding: 20px 0;
@@ -51,7 +51,8 @@
 
 li h3 {
     font-size: 22px;
-    color: #292828;
+    font-family: 'Francois One', sans-serif;
+    color: #DDDDDD;
 }
 
 .container h1 {
@@ -79,20 +80,19 @@ li h3 {
 }
 
 .container button {
-    background-color: #ffffff;
-    border: none;
+    background-color: transparent;
+    border: 2px solid #DDDDDD;
     margin: 50px auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
     max-width: 250px;
     width: 70%;
     height: auto;
     gap: 10px;
     border-radius: 5px;
-    color: #F01E27;
+    color: #DDDDDD;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
