@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PokemonCard from './PokemonCard';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner'; // Importe o Spinner do react-bootstrap
 
 const PokemonList = ({ searchTerm }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true); // Adicione o estado de carregamento
   const limit = 20; // Define o limite de pokémons por página
 
   useEffect(() => {
@@ -34,6 +36,7 @@ const PokemonList = ({ searchTerm }) => {
   }, [offset, searchTerm]);
 
   const fetchData = async (newOffset) => {
+    setLoading(true); // Inicia o carregamento
     try {
       const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${newOffset}`);
       const results = response.data.results;
@@ -73,10 +76,13 @@ const PokemonList = ({ searchTerm }) => {
       console.error('Error fetching data: ', error);
       setError(true);
       setPokemonList([]); // Limpa a lista de pokémons em caso de erro
+    } finally {
+      setLoading(false); // Finaliza o carregamento
     }
   };
 
   const fetchSearchedPokemon = async () => {
+    setLoading(true); // Inicia o carregamento
     try {
       const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
       const detailedPokemonResponse = response.data;
@@ -103,6 +109,8 @@ const PokemonList = ({ searchTerm }) => {
       console.error('Error fetching data: ', error);
       setError(true);
       setPokemonList([]); // Limpa a lista de pokémons em caso de erro
+    } finally {
+      setLoading(false); // Finaliza o carregamento
     }
   };
 
@@ -160,6 +168,11 @@ const PokemonList = ({ searchTerm }) => {
 
   return (
     <div className='container'>
+      {loading && (
+        <div className="loading">
+          <Spinner animation="border" variant="primary" /> Carregando Pokémons...
+        </div>
+      )}
       <ul className="pokemon-list" style={{ 
         flexDirection: pokemonList.length === 1 ? 'column' : 'row',
         gap: pokemonList.length === 1 ? '0px' : '100px'}}>
